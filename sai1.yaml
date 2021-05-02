@@ -1,0 +1,32 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: ElasticsearchDomain resource
+Resources:
+  ElasticsearchDomain:
+    Type: AWS::Elasticsearch::Domain
+    Properties:
+      DomainName: "anvika1"
+      ElasticsearchClusterConfig:
+        DedicatedMasterEnabled: "true"
+        InstanceCount: "1"
+        ZoneAwarenessEnabled: "false"
+        InstanceType: "t2.small.elasticsearch"
+      EBSOptions:
+        EBSEnabled: true
+        Iops: 0
+        VolumeSize: 10
+        VolumeType: "gp2"
+      AccessPolicies:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+               AWS: "*"
+            Action: 
+              - es:ESHttp*
+            Condition:
+              IpAddress:
+                aws:SourceIp:
+                  - 192.0.2.0/24
+            Resource: arn:aws:es:us-west-1:987654321098:domain/anvika1/*
+      AdvancedOptions:
+        rest.action.multi.allow_explicit_index: "true"
